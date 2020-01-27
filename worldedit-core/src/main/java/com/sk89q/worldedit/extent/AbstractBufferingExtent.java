@@ -25,7 +25,7 @@ import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockStateHolder;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 
 /**
  * Base extent class for buffering changes between {@link #setBlock(BlockVector3, BlockStateHolder)}
@@ -51,17 +51,23 @@ public abstract class AbstractBufferingExtent extends AbstractDelegateExtent {
 
     @Override
     public BlockState getBlock(BlockVector3 position) {
-        return getBufferedBlock(position)
-            .map(BaseBlock::toImmutableState)
-            .orElseGet(() -> super.getBlock(position));
+        BaseBlock block = getBufferedBlock(position);
+        if (block == null) {
+            return super.getBlock(position);
+        }
+        return block.toImmutableState();
     }
 
     @Override
-    public BaseBlock getFullBlock(BlockVector3 position) {
-        return getBufferedBlock(position)
-            .orElseGet(() -> super.getFullBlock(position));
+        public BaseBlock getFullBlock(BlockVector3 position) {
+        BaseBlock block = getBufferedBlock(position);
+        if (block == null) {
+            return super.getFullBlock(position);
+        }
+        return block;
     }
 
-    protected abstract Optional<BaseBlock> getBufferedBlock(BlockVector3 position);
+    @Nullable
+    protected abstract BaseBlock getBufferedBlock(BlockVector3 position);
 
 }

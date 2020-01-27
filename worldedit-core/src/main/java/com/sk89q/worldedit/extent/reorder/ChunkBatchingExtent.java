@@ -32,8 +32,6 @@ import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockStateHolder;
 
 import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * A special extent that batches changes into Minecraft chunks. This helps
@@ -77,8 +75,8 @@ public class ChunkBatchingExtent extends AbstractBufferingExtent {
     }
 
     @Override
-    protected Optional<BaseBlock> getBufferedBlock(BlockVector3 position) {
-        return Optional.ofNullable(blockMap.get(position));
+    protected BaseBlock getBufferedBlock(BlockVector3 position) {
+        return blockMap.get(position);
     }
 
     @Override
