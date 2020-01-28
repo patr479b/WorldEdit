@@ -19,7 +19,6 @@
 
 package com.sk89q.worldedit.extent.reorder;
 
-import com.google.common.collect.ImmutableSortedSet;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.extent.AbstractBufferingExtent;
 import com.sk89q.worldedit.extent.Extent;
@@ -92,8 +91,7 @@ public class ChunkBatchingExtent extends AbstractBufferingExtent {
             @Override
             public Operation resume(RunContext run) throws WorldEditException {
                 if (iterator == null) {
-                    iterator = ImmutableSortedSet.copyOf(RegionOptimizedComparator.INSTANCE,
-                        blockMap.keySet()).iterator();
+                    iterator = blockMap.keySet().parallelStream().sorted(RegionOptimizedComparator.INSTANCE).iterator();
                 }
                 while (iterator.hasNext()) {
                     BlockVector3 position = iterator.next();
